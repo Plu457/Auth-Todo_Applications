@@ -9,7 +9,7 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Todo />} />
-        <Route path="/auth" element={<Auth />} />
+        <Route path="/auth/:sign" element={<Auth />} />
       </Routes>
     </BrowserRouter>
   );
