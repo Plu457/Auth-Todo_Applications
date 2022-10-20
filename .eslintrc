@@ -1,6 +1,8 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["react-app", "plugin:prettier/recommended"],
   "rules": {
-    "react-hooks/exhaustive-deps": 0
+    "rules": {
+      "react-hooks/exhaustive-deps": 0
+    }
   }
 }

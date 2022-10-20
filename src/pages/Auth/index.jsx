@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 import styled from 'styled-components';
-import { postAuth } from 'utils';
-import InputComponent from './InputComponent';
 import { Button } from 'antd';
+import { postAuth } from 'utils';
+import { Canstant } from 'commons';
+import InputComponent from './InputComponent';
 
 const scheme = Yup.object().shape({
   email: Yup.string()
@@ -35,12 +35,20 @@ const Auth = () => {
 
   const params = useParams();
   const navigate = useNavigate();
+
   const currentPage = params.sign;
+  const pageInfoData = Canstant.authInfo[currentPage];
+  const currentPageTitle =
+    currentPage === 'sign_in'
+      ? '로그인'
+      : currentPage === 'sign_up'
+      ? '회원가입'
+      : '페이지가 없음';
 
   const postAuthData = async (data, currentPage) => {
     try {
-      const res = await postAuth.postAuth(data, currentPage);
-      if (res.status === 200 || res.status === 204) {
+      const res = await postAuth(data, currentPage);
+      if (res.status === 200 || res.status === 201 || res.status === 204) {
         localStorage.setItem('access_token', res.data['access_token']);
         navigate('/');
       }
@@ -56,31 +64,22 @@ const Auth = () => {
 
   return (
     <Styled>
-      {currentPage === 'sign_in' ? (
-        <h1>로그인</h1>
-      ) : currentPage === 'sign_up' ? (
-        <h1>회원가입</h1>
-      ) : (
-        '모르느 페이지'
-      )}
+      <h1>{currentPageTitle}</h1>
       <form onSubmit={handleSubmit(data => postAuthData(data, currentPage))}>
-        //* Canstant 파엘에 sign_in, sign_up에 따른 상수 데이터 추가
-        <InputComponent
-          name="email"
-          label="이메일"
-          onChange={onChange}
-          register={register}
-          warning={errors.email ? errors.email.message : ''}
-        />
-        <InputComponent
-          name="password"
-          label="비밀번호"
-          onChange={onChange}
-          register={register}
-          warning={errors.password ? errors.password.message : ''}
-        />
+        {Object.keys(pageInfoData).map(info => {
+          return (
+            <InputComponent
+              key={info}
+              name={pageInfoData[info]}
+              label={info}
+              onChange={onChange}
+              register={register}
+              warning={errors[info] ? errors[info].message : ''}
+            />
+          );
+        })}
         <Button htmlType="submit" type="primary">
-          Submit
+          {currentPageTitle}
         </Button>
       </form>
     </Styled>

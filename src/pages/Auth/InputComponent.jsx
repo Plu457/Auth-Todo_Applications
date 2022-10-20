@@ -6,9 +6,19 @@ const InputComponent = ({ name, label, onChange, register, warning }) => {
     <Styled>
       <label>{label}</label>
       {name !== 'password' ? (
-        <Input {...register(name)} name={name} onChange={onChange} />
+        <Input
+          placeholder={label}
+          {...register(name)}
+          name={name}
+          onChange={onChange}
+        />
       ) : (
-        <Input.Password {...register(name)} name={name} onChange={onChange} />
+        <Input.Password
+          placeholder={label}
+          {...register(name)}
+          name={name}
+          onChange={onChange}
+        />
       )}
       <p>{warning}</p>
     </Styled>
