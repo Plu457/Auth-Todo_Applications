@@ -57,9 +57,9 @@ const Auth = () => {
     }
   };
 
-  const onChange = e => {
-    clearErrors([e.target.name]);
-    setValue(e.target.name, e.target.value);
+  const onChange = ({ target }) => {
+    clearErrors([target.name]);
+    setValue(target.name, target.value);
   };
 
   return (
